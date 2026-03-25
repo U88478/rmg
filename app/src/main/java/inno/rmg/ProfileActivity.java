@@ -21,6 +21,7 @@ public class ProfileActivity extends AppCompatActivity {
     List<Review> reviews = DataManager.getInstance()
             .getReviewsForUser(DataManager.getInstance().getCurrentUser().getId());
 
+    List<Game> games = DataManager.getInstance().getGames();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,5 +111,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void showCoupDeCoeurTab() {
+        GameCardAdapter adapter = new GameCardAdapter(this, games);
+        binding.rvTabContent.setAdapter(adapter);
     }
 }
