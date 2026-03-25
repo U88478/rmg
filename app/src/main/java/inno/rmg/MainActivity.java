@@ -30,20 +30,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Find the RecyclerView in the layout
         RecyclerView rvGames = findViewById(R.id.rvGames);
 
-        // Create some fake data for now
-        List<Game> games = new ArrayList<>();
+        List<Game> games = DataManager.getInstance().getGames();
         games.add(new Game("Baldur's Gate 3", "PC / PS5", 96, 48000));
         games.add(new Game("Zelda: Tears of the Kingdom", "Nintendo Switch", 94, 32000));
         games.add(new Game("Elden Ring", "PC / Console", 91, 55000));
         games.add(new Game("Final Fantasy XVI", "PS5", 85, 1200));
 
-        // Tell the RecyclerView to stack items vertically
         rvGames.setLayoutManager(new LinearLayoutManager(this));
 
-        // Give it the adapter with the data
         rvGames.setAdapter(new GameCardAdapter(this, games));
     }
 }

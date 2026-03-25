@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Rmg">
         <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".GameDetailActivity"
             android:exported="false" />
         <activity
