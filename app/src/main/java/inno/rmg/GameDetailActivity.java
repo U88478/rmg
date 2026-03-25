@@ -4,9 +4,8 @@ import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import inno.rmg.databinding.ActivityGameDetailBinding;
 
 public class GameDetailActivity extends AppCompatActivity {
 
@@ -14,13 +13,16 @@ public class GameDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_game_detail);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        ActivityGameDetailBinding binding = ActivityGameDetailBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        String title = getIntent().getStringExtra("game_title");
+        Game game = (Game) getIntent().getSerializableExtra("game");
+
+        assert game != null;
+        binding.tvGameTitle.setText(game.getTitle());
+        binding.tvGlobalScore.setText(String.valueOf(game.getScore()));
+        binding.tvReviewCount.setText(String.valueOf(game.getReviewCount()));
+
+
     }
 }
