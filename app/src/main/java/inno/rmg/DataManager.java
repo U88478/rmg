@@ -2,6 +2,7 @@ package inno.rmg;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class DataManager {
     private static DataManager instance;
@@ -16,6 +17,13 @@ public class DataManager {
         games.add(new Game("Zelda: Tears of the Kingdom", "Nintendo Switch", 94, 32000));
         games.add(new Game("Elden Ring", "PC / Console", 91, 55000));
         games.add(new Game("Final Fantasy XVI", "PS5", 85, 1200));
+        reviews.add(new Review("1", "a", "rev", 10));
+        currentUser = new Profile("name",
+                Map.of(
+                "twitter", "@usertwitter",
+                "instagram", "@userinstagram",
+                "discord", "@userdiscord"),
+                "bio");
     }
 
     public static DataManager getInstance() {
@@ -49,5 +57,8 @@ public class DataManager {
             if (r.getUserId().equals(userId)) result.add(r);
         }
         return result;
+    }
+
+    public Game getGameById(String gameId) { return games.get(0);
     }
 }

@@ -33,10 +33,6 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView rvGames = findViewById(R.id.rvGames);
 
         List<Game> games = DataManager.getInstance().getGames();
-        games.add(new Game("Baldur's Gate 3", "PC / PS5", 96, 48000));
-        games.add(new Game("Zelda: Tears of the Kingdom", "Nintendo Switch", 94, 32000));
-        games.add(new Game("Elden Ring", "PC / Console", 91, 55000));
-        games.add(new Game("Final Fantasy XVI", "PS5", 85, 1200));
 
         rvGames.setLayoutManager(new LinearLayoutManager(this));
 

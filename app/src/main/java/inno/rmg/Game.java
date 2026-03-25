@@ -20,4 +20,7 @@ public class Game implements Serializable {
     public String getPlatform() { return platform; }
     public int getScore() { return score; }
     public int getReviewCount() { return reviewCount; }
+
+    public String getCoverUrl() { return "http://";
+    }
 }
