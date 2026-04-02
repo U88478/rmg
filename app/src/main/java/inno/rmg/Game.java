@@ -3,12 +3,14 @@ package inno.rmg;
 import java.io.Serializable;
 
 public class Game implements Serializable {
+    private String id;
     private String title;
     private String platform;
     private int score;
     private int reviewCount;
 
-    public Game(String title, String platform, int score, int reviewCount) {
+    public Game(String id, String title, String platform, int score, int reviewCount) {
+        this.id = id;
         this.title = title;
         this.platform = platform;
         this.score = score;
@@ -22,5 +24,9 @@ public class Game implements Serializable {
     public int getReviewCount() { return reviewCount; }
 
     public String getCoverUrl() { return "http://";
+    }
+
+    public String getId() {
+        return id;
     }
 }

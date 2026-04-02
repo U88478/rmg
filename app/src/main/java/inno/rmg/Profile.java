@@ -1,6 +1,7 @@
 package inno.rmg;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,13 +12,15 @@ public class Profile {
     private HashMap<String, String> media;
     private String bio;
     private List<Review> reviews;
-    private int games_rated;
-    private float rate_avg;
+    private List<String> favouriteIds;
 
     public Profile(String name, Map<String, String> media, String bio) {
+        this.id = "u1";
         this.name = name;
         this.media = new HashMap<>(media);
         this.bio = bio;
+        this.reviews = new ArrayList<>();
+        this.favouriteIds = new ArrayList<>();
     }
     
     public String getName() {
@@ -49,9 +52,14 @@ public class Profile {
         return (float) sum / reviews.size();
     }
 
-    public void getUserId() {
 
+    public String getUserId() {return id;}
+
+    public List<String> getFavouriteIds() {
+        return favouriteIds;
     }
 
-    public String getId() {return id;}
+    public void addFavourite(String gameId) {
+        favouriteIds.add(gameId);
+    }
 }

@@ -2,40 +2,43 @@ package inno.rmg;
 
 import android.os.Bundle;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.view.View;
-
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import inno.rmg.databinding.ActivityMainBinding;
 
-import android.view.Menu;
-import android.view.MenuItem;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity {
+
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        RecyclerView rvGames = findViewById(R.id.rvGames);
+        // load home by default
+        loadFragment(new HomeFragment());
 
-        List<Game> games = DataManager.getInstance().getGames();
+        binding.bottomNav.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.nav_home) {
+                loadFragment(new HomeFragment());
+            } else if (id == R.id.nav_search) {
+                loadFragment(new SearchFragment());
+            } else if (id == R.id.nav_profile) {
+                loadFragment(new ProfileFragment());
+            }
+            return true;
+        });
+    }
 
-        rvGames.setLayoutManager(new LinearLayoutManager(this));
-
-        rvGames.setAdapter(new GameCardAdapter(this, games));
+    private void loadFragment(Fragment fragment) {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.fragmentContainer, fragment);
+        ft.commit();
     }
 }

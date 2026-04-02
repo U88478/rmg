@@ -8,14 +8,14 @@ public class Review {
     private final String userId;
     private String text;
     private int score;
-    private long date;
+    private String date;
 
-    public Review(String gameId, String userId, String text, int score) {
+    public Review(String gameId, String userId, String text, int score, String date) {
         this.gameId = gameId;
         this.userId = userId;
         this.text = text;
         this.score = score;
-        this.date = System.currentTimeMillis();
+        this.date = date;
     }
 
     public void setText(String text) {this.text = text;}
@@ -30,5 +30,5 @@ public class Review {
 
     public int getScore() {return score;}
 
-    public long getDate() {return date;}
+    public String getDate() {return date;}
 }

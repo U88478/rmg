@@ -1,6 +1,7 @@
 package inno.rmg;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +20,7 @@ import inno.rmg.databinding.ActivityProfileBinding;
 public class ProfileActivity extends AppCompatActivity {
     ActivityProfileBinding binding = ActivityProfileBinding.inflate(getLayoutInflater());
     List<Review> reviews = DataManager.getInstance()
-            .getReviewsForUser(DataManager.getInstance().getCurrentUser().getId());
+            .getReviewsForUser(DataManager.getInstance().getCurrentUser().getUserId());
 
     List<Game> games = DataManager.getInstance().getGames();
 
@@ -102,10 +103,13 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void showProfilTab() {
-
+        binding.layoutProfilStats.setVisibility(View.VISIBLE);
+        binding.rvTabContent.setVisibility(View.GONE);
     }
 
     private void showCritiquesTab() {
+        binding.layoutProfilStats.setVisibility(View.GONE);
+        binding.rvTabContent.setVisibility(View.VISIBLE);
         ReviewAdapter adapter = new ReviewAdapter(this, reviews);
         binding.rvTabContent.setAdapter(adapter);
     }

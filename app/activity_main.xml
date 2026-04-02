@@ -20,6 +20,7 @@
         android:background="#16213e"
         app:itemTextColor="#AAAAAA"
         app:itemIconTint="#AAAAAA"
+        app:itemActiveIndicatorColor="#7B2FBE"
         app:menu="@menu/bottom_nav_menu"/>
 
 </LinearLayout>
