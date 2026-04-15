@@ -13,7 +13,8 @@ public class DataManager {
     private Profile currentUser;
 
     // singleton - only one instance exists
-    private DataManager() {Map<String, String> media = new HashMap<>();
+    private DataManager() {
+        Map<String, String> media = new HashMap<>();
         media.put("twitter", "GamerUserX_FR");
         media.put("instagram", "GamerUser_FR");
         media.put("discord", "GamerUserDiscord");
@@ -23,12 +24,12 @@ public class DataManager {
         currentUser.addFavourite("g1");
         currentUser.addFavourite("g2");
 
-        games.add(new Game("g1", "Baldur's Gate 3", "PC / PS5", 96, 48000));
-        games.add(new Game("g2", "Zelda: Tears of the Kingdom", "Nintendo Switch", 94, 32000));
-        games.add(new Game("g3", "Elden Ring", "PC / Console", 91, 55000));
-        games.add(new Game("g4", "Final Fantasy XVI", "PS5", 85, 1200));
-        games.add(new Game("g5", "Diablo IV", "PC / Console", 75, 3200));
-        games.add(new Game("g6", "Starfield", "PC / Xbox", 60, 23400));
+        games.add(new Game("g1", "Baldur's Gate 3", "PC / PS5", "Larian Studios", 96, 48000));
+        games.add(new Game("g2", "Zelda: Tears of the Kingdom", "Nintendo Switch", "Nintendo", 94, 32000));
+        games.add(new Game("g3", "Elden Ring", "PC / Console", "FromSoftware", 91, 55000));
+        games.add(new Game("g4", "Final Fantasy XVI", "PS5", "Square Enix", 85, 1200));
+        games.add(new Game("g5", "Diablo IV", "PC / Console", "Blizzard", 75, 3200));
+        games.add(new Game("g6", "Starfield", "PC / Xbox", "Bethesda", 60, 23400));
 
         reviews.add(new Review("g1", currentUser.getUserId(), "Chef d'oeuvre absolu, la liberté et la créativité sont inégalées.", 96, "10/06/2026"));
         reviews.add(new Review("g2", currentUser.getUserId(), "Nintendo frappe encore très fort.", 94, "12/06/2026"));
@@ -69,6 +70,35 @@ public class DataManager {
         return result;
     }
 
-    public Game getGameById(String gameId) { return games.get(0);
+    public Game getGameById(String gameId) {
+        for (Game g : games) {
+            if (g.getId().equals(gameId)) {
+                return g;
+            }
+        }
+        return null;
+    }
+
+    public List<Game> searchGames(String query) {
+        List<Game> result = new ArrayList<>();
+        for (Game g : games) {
+            if (g.getTitle().toLowerCase().contains(query.toLowerCase())) {
+                result.add(g);
+            }
+        }
+        return result;
+    }
+
+    public void addReview(Review review) {
+        reviews.add(review);
+    }
+
+    public Review getReviewByUserAndGame(String userId, String gameId) {
+        for (Review r : reviews) {
+            if (r.getUserId().equals(userId) && r.getGameId().equals(gameId)) {
+                return r;
+            }
+        }
+        return null;
     }
 }

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#1a1a2e"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tvGameTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Game Title"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="24dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ta note"
+        android:textColor="#AAAAAA"
+        android:textSize="14sp"
+        android:layout_marginBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/tvScorePreview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="70"
+        android:textColor="#7B2FBE"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        android:inputType="number"
+        android:background="@null"
+        android:layout_gravity="center_horizontal"
+        android:maxLength="3"
+        android:layout_marginBottom="8dp"/>
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/sliderScore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        app:thumbColor="#7B2FBE"
+        app:trackColorActive="#7B2FBE"
+        app:trackColorInactive="#444444"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ta critique"
+        android:textColor="#AAAAAA"
+        android:textSize="14sp"
+        android:layout_marginBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/etComment"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:hint="Écris ta critique ici..."
+        android:textColor="#FFFFFF"
+        android:textColorHint="#AAAAAA"
+        android:background="#16213e"
+        android:padding="12dp"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:layout_marginBottom="24dp"/>
+
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Soumettre"
+        android:backgroundTint="#7B2FBE"
+        android:textColor="#FFFFFF"/>
+
+</LinearLayout>

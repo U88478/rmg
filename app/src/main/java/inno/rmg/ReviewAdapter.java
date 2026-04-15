@@ -1,13 +1,16 @@
 package inno.rmg;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.List;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder> {
@@ -51,7 +54,15 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
     }
 
     @Override
-    public int getItemCount() { return reviews.size(); }
+    public int getItemCount() {
+        return reviews.size();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void updateData(List<Review> newReviews) {
+        this.reviews = newReviews;
+        notifyDataSetChanged();
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivGameCover;

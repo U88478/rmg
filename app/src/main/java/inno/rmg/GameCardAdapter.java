@@ -1,5 +1,6 @@
 package inno.rmg;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -45,7 +46,15 @@ public class GameCardAdapter extends RecyclerView.Adapter<GameCardAdapter.ViewHo
     }
 
     @Override
-    public int getItemCount() { return games.size(); }
+    public int getItemCount() {
+        return games.size();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void updateData(List<Game> newGames) {
+        this.games = newGames;
+        notifyDataSetChanged();
+    }
 
     // ViewHolder = holds references to the views inside one card
     public static class ViewHolder extends RecyclerView.ViewHolder {

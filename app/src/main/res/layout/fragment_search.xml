@@ -3,14 +3,26 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="#1a1a2e"
-    android:gravity="center">
+    android:padding="16dp">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/etSearch"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Recherche"
+        android:hint="Rechercher un jeu..."
         android:textColor="#FFFFFF"
-        android:textSize="22sp"/>
+        android:textColorHint="#AAAAAA"
+        android:backgroundTint="#7B2FBE"
+        android:inputType="text"
+        android:padding="20dp"
+        android:textSize="18sp"
+        android:layout_marginBottom="12dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvResults"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

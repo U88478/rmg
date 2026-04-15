@@ -62,4 +62,5 @@ public class Profile {
     public void addFavourite(String gameId) {
         favouriteIds.add(gameId);
     }
+
 }
