@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1a1a2e"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="32dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="RateMyGame"
+        android:textColor="#FFFFFF"
+        android:textSize="32sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="48dp"
+        android:text="Notez vos jeux"
+        android:textColor="#AAAAAA"
+        android:textSize="14sp" />
+
+    <androidx.cardview.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:cardBackgroundColor="#16213e"
+        app:cardCornerRadius="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <EditText
+                android:id="@+id/etUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@null"
+                android:hint="Nom d'utilisateur"
+                android:inputType="text"
+                android:padding="12dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#AAAAAA" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="16dp"
+                android:background="#333355" />
+
+            <EditText
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:hint="Mot de passe"
+                android:inputType="textPassword"
+                android:padding="12dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#AAAAAA" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/btnSignIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="#7B2FBE"
+        android:text="Se connecter"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/btnSignUp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#16213e"
+        android:text="Créer un compte"
+        android:textColor="#7B2FBE" />
+
+    <TextView
+        android:id="@+id/tvError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text=""
+        android:textColor="#FF3B30"
+        android:textSize="13sp" />
+
+</LinearLayout>

@@ -1,17 +1,24 @@
 package inno.rmg;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.google.android.material.tabs.TabLayout;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import inno.rmg.databinding.FragmentProfileBinding;
 
 public class ProfileFragment extends Fragment {
@@ -21,7 +28,8 @@ public class ProfileFragment extends Fragment {
     private List<Review> reviews;
     private List<Game> games;
 
-    public ProfileFragment() {}
+    public ProfileFragment() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,15 +42,12 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         user = DataManager.getInstance().getCurrentUser();
-        reviews = DataManager.getInstance().getReviewsForUser(user.getUserId());
+        reviews = DataManager.getInstance().getReviewsForUser(user.getId());
         games = DataManager.getInstance().getGames();
 
         // bind user info
         binding.tvUsername.setText(user.getName());
         binding.tvBio.setText(user.getBio());
-        binding.tvTwitter.setText("@" + user.getMedia().getOrDefault("twitter", ""));
-        binding.tvInstagram.setText("@" + user.getMedia().getOrDefault("instagram", ""));
-        binding.tvDiscord.setText("@" + user.getMedia().getOrDefault("discord", ""));
 
         // stats
         binding.tvStatGamesRated.setText(String.valueOf(user.getGames_rated()));
@@ -71,6 +76,12 @@ public class ProfileFragment extends Fragment {
         binding.barChart.getAxisLeft().setAxisMaximum(5);
         binding.barChart.getXAxis().setAxisMinimum(0);
         binding.barChart.getXAxis().setAxisMaximum(100);
+        binding.barChart.setBackgroundColor(0xFF1a1a2e);
+        dataSet.setColor(0xFF7B2FBE);
+        binding.barChart.getAxisLeft().setTextColor(0xFFFFFFFF);
+        binding.barChart.getXAxis().setTextColor(0xFFFFFFFF);
+        binding.barChart.getAxisLeft().setGridColor(0xFF444444);
+        binding.barChart.getXAxis().setGridColor(0xFF444444);
         binding.barChart.setTouchEnabled(false);
         binding.barChart.invalidate();
 
@@ -80,19 +91,75 @@ public class ProfileFragment extends Fragment {
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Critiques"));
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Coup de Cœur"));
 
+        binding.btnLogout.setOnClickListener(v -> {
+            SessionManager.getInstance(requireContext()).clearSession();
+            DataManager.getInstance().setGames(new ArrayList<>());
+            DataManager.getInstance().setReviews(new ArrayList<>());
+            DataManager.getInstance().setCurrentUser(new Profile());
+            Intent intent = new Intent(requireContext(), AuthActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        });
+
+        binding.btnEditBio.setOnClickListener(v -> {
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(requireContext());
+            builder.setTitle("Modifier la bio");
+
+            EditText input = new EditText(requireContext());
+            input.setText(user.getBio());
+            input.setTextColor(0xFF000000);
+            input.setHintTextColor(0xFF888888);
+            input.setPadding(48, 24, 48, 24);
+            builder.setView(input);
+
+            builder.setPositiveButton("Sauvegarder", (dialog, which) -> {
+                String newBio = input.getText().toString().trim();
+                // update locally
+                user.setBio(newBio);
+                binding.tvBio.setText(newBio);
+                // update in Supabase
+                SupabaseRepository.getInstance().updateBio(user.getId(), newBio, new DataCallback<Void>() {
+                    @Override
+                    public void onSuccess(Void data) {
+                        Log.d("RMG", "Bio updated");
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        Log.e("RMG", "Bio update failed: " + error);
+                    }
+                });
+            });
+
+            builder.setNegativeButton("Annuler", (dialog, which) -> dialog.cancel());
+            builder.show();
+        });
+
         showProfilTab();
 
         binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
-                    case 0: showProfilTab(); break;
-                    case 1: showCritiquesTab(); break;
-                    case 2: showCoupDeCoeurTab(); break;
+                    case 0:
+                        showProfilTab();
+                        break;
+                    case 1:
+                        showCritiquesTab();
+                        break;
+                    case 2:
+                        showCoupDeCoeurTab();
+                        break;
                 }
             }
-            @Override public void onTabUnselected(TabLayout.Tab tab) {}
-            @Override public void onTabReselected(TabLayout.Tab tab) {}
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
         });
     }
 
@@ -104,7 +171,9 @@ public class ProfileFragment extends Fragment {
     private void showCritiquesTab() {
         binding.layoutProfilStats.setVisibility(View.GONE);
         binding.rvTabContent.setVisibility(View.VISIBLE);
-        ReviewAdapter adapter = new ReviewAdapter(requireContext(), reviews);
+        String userId = DataManager.getInstance().getCurrentUser().getId();
+        List<Review> userReviews = DataManager.getInstance().getReviewsForUser(userId);
+        ReviewAdapter adapter = new ReviewAdapter(requireContext(), userReviews);
         binding.rvTabContent.setAdapter(adapter);
     }
 
@@ -118,6 +187,25 @@ public class ProfileFragment extends Fragment {
         }
         GameCardAdapter adapter = new GameCardAdapter(requireContext(), favGames);
         binding.rvTabContent.setAdapter(adapter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        reviews = DataManager.getInstance().getReviewsForUser(user.getId());
+        // refresh whichever tab is currently selected
+        int selected = binding.tabLayout.getSelectedTabPosition();
+        switch (selected) {
+            case 0:
+                showProfilTab();
+                break;
+            case 1:
+                showCritiquesTab();
+                break;
+            case 2:
+                showCoupDeCoeurTab();
+                break;
+        }
     }
 
     @Override

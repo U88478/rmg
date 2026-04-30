@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -29,6 +30,12 @@ public class AddReviewActivity extends AppCompatActivity {
         String gameId = getIntent().getStringExtra(EXTRA_GAME_ID);
         game = DataManager.getInstance().getGameById(gameId);
 
+        setSupportActionBar(binding.toolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         if (game != null) {
             binding.tvGameTitle.setText(game.getTitle());
         }
@@ -47,6 +54,13 @@ public class AddReviewActivity extends AppCompatActivity {
                 binding.tvScorePreview.setText(String.valueOf((int) value));
             }
         });
+
+        Review existing = (Review) getIntent().getSerializableExtra("existing_review");
+        if (existing != null) {
+            binding.sliderScore.setValue(existing.getScore());
+            binding.tvScorePreview.setText(String.valueOf(existing.getScore()));
+            binding.etComment.setText(existing.getText());
+        }
 
         binding.tvScorePreview.addTextChangedListener(new TextWatcher() {
             @Override
@@ -84,10 +98,39 @@ public class AddReviewActivity extends AppCompatActivity {
         }
 
         String date = new SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE).format(new Date());
-        String userId = DataManager.getInstance().getCurrentUser().getUserId();
+        String userId = DataManager.getInstance().getCurrentUser().getId();
+        String username = DataManager.getInstance().getCurrentUser().getName();
 
-        Review review = new Review(game.getId(), userId, text, score, date);
+        Review existing = (Review) getIntent().getSerializableExtra("existing_review");
+        Review review = new Review(game.getId(), userId, username, text, score, date);
+
         DataManager.getInstance().addReview(review);
+
+        if (existing != null) {
+            // editing — use PATCH
+            SupabaseRepository.getInstance().updateReview(review, new DataCallback<Void>() {
+                @Override
+                public void onSuccess(Void data) {
+                    Log.d("RMG", "Review updated in Supabase");
+                }
+                @Override
+                public void onError(String error) {
+                    Log.e("RMG", "Failed to update review: " + error);
+                }
+            });
+        } else {
+            // new review — use POST
+            SupabaseRepository.getInstance().addReview(review, new DataCallback<Void>() {
+                @Override
+                public void onSuccess(Void data) {
+                    Log.d("RMG", "Review saved to Supabase");
+                }
+                @Override
+                public void onError(String error) {
+                    Log.e("RMG", "Failed to save review: " + error);
+                }
+            });
+        }
 
         setResult(Activity.RESULT_OK);
         finish();

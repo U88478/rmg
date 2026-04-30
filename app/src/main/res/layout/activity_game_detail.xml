@@ -6,10 +6,18 @@
     android:layout_height="match_parent"
     android:background="#1a1a2e">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="#1a1a2e"
+            app:navigationIconTint="#FFFFFF"/>
 
         <!-- Cover image -->
         <ImageView
@@ -149,6 +157,19 @@
             android:text="Donner ma note"
             android:backgroundTint="#7B2FBE"
             android:textColor="#FFFFFF"/>
+
+        <!-- CDC button -->
+        <Button
+            android:id="@+id/btnCoupDeCoeur"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="♥ Coup de Cœur"
+            android:backgroundTint="#16213e"
+            android:textColor="#7B2FBE"
+            android:strokeColor="#7B2FBE"/>
 
         <!-- Reviews section header -->
         <TextView

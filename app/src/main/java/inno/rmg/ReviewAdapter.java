@@ -2,6 +2,7 @@ package inno.rmg;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -40,17 +43,23 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
         if (game != null) {
             holder.tvGameTitle.setText(game.getTitle());
-            // cover image
-            int resId = context.getResources().getIdentifier(
-                    game.getCoverUrl(), "drawable", context.getPackageName());
-            if (resId != 0) {
-                holder.ivGameCover.setImageResource(resId);
-            }
+            holder.tvGameTitle.setText(game.getTitle());
+            Glide.with(context)
+                    .load(game.getCoverUrl())
+                    .placeholder(R.color.cardBackground)
+                    .error(R.color.cardBackground)
+                    .into(holder.ivGameCover);
         }
 
         holder.tvReviewSnippet.setText(review.getText());
         holder.tvScore.setText(String.valueOf(review.getScore()));
         holder.tvDate.setText(String.valueOf(review.getDate()));
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ReviewDetailActivity.class);
+            intent.putExtra(ReviewDetailActivity.EXTRA_REVIEW, review);
+            context.startActivity(intent);
+        });
     }
 
     @Override

@@ -1,34 +1,57 @@
 package inno.rmg;
 
-import java.sql.Time;
-import java.sql.Timestamp;
+import com.google.gson.annotations.SerializedName;
 
-public class Review {
+import java.io.Serializable;
+
+public class Review implements Serializable {
+    @SerializedName("game_id")
     private final String gameId;
+    @SerializedName("user_id")
     private final String userId;
+    private String username;
     private String text;
     private int score;
     private String date;
 
-    public Review(String gameId, String userId, String text, int score, String date) {
+    public Review(String gameId, String userId, String username, String text, int score, String date) {
         this.gameId = gameId;
         this.userId = userId;
+        this.username = username;
         this.text = text;
         this.score = score;
         this.date = date;
     }
 
-    public void setText(String text) {this.text = text;}
+    public String getGameId() {
+        return gameId;
+    }
 
-    public void setScore(int score) {this.score = score;}
+    public String getId() {
+        return userId;
+    }
 
-    public String getGameId() {return gameId;}
+    public String getUsername() {
+        return username;
+    }
 
-    public String getUserId() {return userId;}
+    public String getText() {
+        return text;
+    }
 
-    public String getText() {return text;}
+    public void setText(String text) {
+        this.text = text;
+    }
 
-    public int getScore() {return score;}
+    public int getScore() {
+        return score;
+    }
 
-    public String getDate() {return date;}
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public String getDate() {
+        return date;
+    }
 }

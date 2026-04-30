@@ -1,9 +1,7 @@
 package inno.rmg;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class DataManager {
     private static DataManager instance;
@@ -14,27 +12,7 @@ public class DataManager {
 
     // singleton - only one instance exists
     private DataManager() {
-        Map<String, String> media = new HashMap<>();
-        media.put("twitter", "GamerUserX_FR");
-        media.put("instagram", "GamerUser_FR");
-        media.put("discord", "GamerUserDiscord");
-
-        currentUser = new Profile("Gamer_User", media, "La bio détaillée de Gamer_User sur ses préférences de jeu, ses genres favoris, et une description courte et spirituelle de sa philosophie du jeu. Passionné des RPGs et les jeux de simulation.");
-
-        currentUser.addFavourite("g1");
-        currentUser.addFavourite("g2");
-
-        games.add(new Game("g1", "Baldur's Gate 3", "PC / PS5", "Larian Studios", 96, 48000));
-        games.add(new Game("g2", "Zelda: Tears of the Kingdom", "Nintendo Switch", "Nintendo", 94, 32000));
-        games.add(new Game("g3", "Elden Ring", "PC / Console", "FromSoftware", 91, 55000));
-        games.add(new Game("g4", "Final Fantasy XVI", "PS5", "Square Enix", 85, 1200));
-        games.add(new Game("g5", "Diablo IV", "PC / Console", "Blizzard", 75, 3200));
-        games.add(new Game("g6", "Starfield", "PC / Xbox", "Bethesda", 60, 23400));
-
-        reviews.add(new Review("g1", currentUser.getUserId(), "Chef d'oeuvre absolu, la liberté et la créativité sont inégalées.", 96, "10/06/2026"));
-        reviews.add(new Review("g2", currentUser.getUserId(), "Nintendo frappe encore très fort.", 94, "12/06/2026"));
-        reviews.add(new Review("g3", currentUser.getUserId(), "Difficile mais tellement gratifiant.", 91, "15/06/2026"));
-        reviews.add(new Review("g4", currentUser.getUserId(), "Très bon JRPG, histoire captivante.", 85, "20/06/2026"));
+        currentUser = new Profile(); // empty but not null
     }
 
     public static DataManager getInstance() {
@@ -46,12 +24,20 @@ public class DataManager {
         return games;
     }
 
-    public List<Review> getReviews() {
-        return reviews;
+    public void setGames(List<Game> games) {
+        this.games = games;
     }
 
     public Profile getCurrentUser() {
         return currentUser;
+    }
+
+    public void setCurrentUser(Profile user) {
+        this.currentUser = user;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
     }
 
     public List<Review> getReviewsForGame(String gameId) {
@@ -65,7 +51,7 @@ public class DataManager {
     public List<Review> getReviewsForUser(String userId) {
         List<Review> result = new ArrayList<>();
         for (Review r : reviews) {
-            if (r.getUserId().equals(userId)) result.add(r);
+            if (r.getId().equals(userId)) result.add(r);
         }
         return result;
     }
@@ -90,15 +76,31 @@ public class DataManager {
     }
 
     public void addReview(Review review) {
+        // remove existing review from same user for same game first
+        reviews.removeIf(r -> r.getGameId().equals(review.getGameId())
+                && r.getId().equals(review.getId()));
         reviews.add(review);
+    }
+
+    public void deleteReview(String gameId, String userId) {
+        reviews.removeIf(r -> r.getGameId().equals(gameId)
+                && r.getId().equals(userId));
     }
 
     public Review getReviewByUserAndGame(String userId, String gameId) {
         for (Review r : reviews) {
-            if (r.getUserId().equals(userId) && r.getGameId().equals(gameId)) {
+            if (r.getId().equals(userId) && r.getGameId().equals(gameId)) {
                 return r;
             }
         }
         return null;
+    }
+
+    public double getAverageScoreForGame(String gameId) {
+        List<Review> gameReviews = getReviewsForGame(gameId);
+        if (gameReviews.isEmpty()) return 0;
+        int sum = 0;
+        for (Review r : gameReviews) sum += r.getScore();
+        return (double) sum / gameReviews.size();
     }
 }

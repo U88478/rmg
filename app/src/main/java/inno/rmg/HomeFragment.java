@@ -12,6 +12,7 @@ import java.util.List;
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
+    private GameCardAdapter adapter;
 
     public HomeFragment() {}
 
@@ -24,11 +25,17 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        List<Game> games = DataManager.getInstance().getGames();
-        GameCardAdapter adapter = new GameCardAdapter(requireContext(), games);
+        adapter = new GameCardAdapter(requireContext(), DataManager.getInstance().getGames());
         binding.rvGames.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.rvGames.setAdapter(adapter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (adapter != null) {
+            adapter.updateData(DataManager.getInstance().getGames());
+        }
     }
 
     @Override

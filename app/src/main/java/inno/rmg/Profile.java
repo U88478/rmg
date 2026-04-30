@@ -1,66 +1,76 @@
 package inno.rmg;
 
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Profile {
     private String id;
     private String name;
-    private HashMap<String, String> media;
     private String bio;
-    private List<Review> reviews;
     private List<String> favouriteIds;
 
-    public Profile(String name, Map<String, String> media, String bio) {
-        this.id = "u1";
-        this.name = name;
-        this.media = new HashMap<>(media);
-        this.bio = bio;
-        this.reviews = new ArrayList<>();
+    // empty constructor for Gson
+    public Profile() {
         this.favouriteIds = new ArrayList<>();
     }
-    
-    public String getName() {
-        return name;
+
+    public Profile(String name, String bio) {
+        this.name = name;
+        this.bio = bio;
+        this.favouriteIds = new ArrayList<>();
     }
 
-    public HashMap<String, String> getMedia() {
-        return media;
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getBio() {
         return bio;
     }
 
-    public List<Review> getReviews() {
-        return reviews;
+    public void setBio(String bio) {
+        this.bio = bio;
     }
-
-    public int getGames_rated() {
-        return reviews.size();
-    }
-
-    public float getRate_avg() {
-        if (reviews.isEmpty()) return 0;
-        int sum = 0;
-        for (Review r : reviews) {
-            sum += r.getScore();
-        }
-        return (float) sum / reviews.size();
-    }
-
-
-    public String getUserId() {return id;}
 
     public List<String> getFavouriteIds() {
+        if (favouriteIds == null) favouriteIds = new ArrayList<>();
         return favouriteIds;
     }
 
-    public void addFavourite(String gameId) {
-        favouriteIds.add(gameId);
+    public void setFavouriteIds(List<String> ids) {
+        this.favouriteIds = ids;
     }
 
+    public void addFavourite(String gameId) {
+        getFavouriteIds().add(gameId);
+    }
+
+    public void toggleCoupDeCoeur(String gameId) {
+        if (getFavouriteIds().contains(gameId)) favouriteIds.remove(gameId);
+        else favouriteIds.add(gameId);
+    }
+
+    public boolean isCoupDeCoeur(String gameId) {
+        return getFavouriteIds().contains(gameId);
+    }
+
+    public int getGames_rated() {
+        return DataManager.getInstance().getReviewsForUser(id).size();
+    }
+
+    public float getRate_avg() {
+        List<Review> userReviews = DataManager.getInstance().getReviewsForUser(id);
+        if (userReviews.isEmpty()) return 0;
+        float sum = 0;
+        for (Review r : userReviews) sum += r.getScore();
+        return sum / userReviews.size();
+    }
 }

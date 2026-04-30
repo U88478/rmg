@@ -3,4 +3,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="tabBackground">#16213e</color>
+    <color name="cardBackground">#16213e</color>
 </resources>
